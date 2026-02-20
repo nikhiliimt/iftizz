@@ -25,22 +25,22 @@ export default function Hero() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=150%",
-          scrub: true,
+          end: "+=250%", // more scroll distance
+          scrub: 1,
           pin: true,
           anticipatePin: 1,
         },
       });
 
-      // CAR MOVEMENT
+      // CAR MOVEMENT THROUGH FULL SCROLL
       tl.fromTo(
         carRef.current,
-        { x: -200 },
-        { x: 400, ease: "none" },
+        { x: -250 },
+        { x: 800, ease: "none" },
         0
       );
 
-      // ROAD COLOR CHANGE
+      // ROAD COLOR TRANSITION
       tl.to(
         roadRef.current,
         {
@@ -50,7 +50,7 @@ export default function Hero() {
         0
       );
 
-      // TEXT FADE
+      // TEXT FADE IN EARLY
       tl.fromTo(
         textRef.current,
         { opacity: 0 },
@@ -58,35 +58,36 @@ export default function Hero() {
         0.1
       );
 
-      // 50%
+      // FIRST PAIR AT 40%
       tl.fromTo(
         topCard1Ref.current,
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 50 },
         { opacity: 1, y: 0 },
-        0.5
+        0.4
       );
 
       tl.fromTo(
         bottomCard1Ref.current,
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 50 },
         { opacity: 1, y: 0 },
-        0.5
+        0.4
       );
 
-      // 100%
+      // SECOND PAIR AT 75%
       tl.fromTo(
         topCard2Ref.current,
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 50 },
         { opacity: 1, y: 0 },
-        1
+        0.75
       );
 
       tl.fromTo(
         bottomCard2Ref.current,
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 50 },
         { opacity: 1, y: 0 },
-        1
+        0.75
       );
+
     }, sectionRef);
 
     return () => ctx.revert();
