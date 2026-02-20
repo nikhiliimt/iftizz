@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -16,6 +16,8 @@ export default function Hero() {
   const bottomCard2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
@@ -23,32 +25,18 @@ export default function Hero() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: () => "+=" + window.innerHeight * 1.5, // smooth natural length
-          scrub: 1,
+          end: "+=150%",
+          scrub: true,
           pin: true,
           anticipatePin: 1,
-          invalidateOnRefresh: true,
         },
       });
 
-      // CAR MOVEMENT (25% visible both sides)
+      // CAR MOVEMENT
       tl.fromTo(
         carRef.current,
-        {
-          x: () => {
-            const w = carRef.current!.offsetWidth;
-            const visible = w * 0.25;
-            return -w + visible;
-          },
-        },
-        {
-          x: () => {
-            const w = carRef.current!.offsetWidth;
-            const visible = w * 0.25;
-            return window.innerWidth - visible;
-          },
-          ease: "none",
-        },
+        { x: -200 },
+        { x: 400, ease: "none" },
         0
       );
 
@@ -62,22 +50,43 @@ export default function Hero() {
         0
       );
 
-      // TEXT FADE IN
+      // TEXT FADE
       tl.fromTo(
         textRef.current,
         { opacity: 0 },
-        { opacity: 1, ease: "none" },
-        0.05
+        { opacity: 1 },
+        0.1
       );
 
-      // 50% → first pair
-      tl.to(topCard1Ref.current, { opacity: 1, y: 0 }, 0.5);
-      tl.to(bottomCard1Ref.current, { opacity: 1, y: 0 }, 0.5);
+      // 50%
+      tl.fromTo(
+        topCard1Ref.current,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0 },
+        0.5
+      );
 
-      // 100% → second pair
-      tl.to(topCard2Ref.current, { opacity: 1, y: 0 }, 1);
-      tl.to(bottomCard2Ref.current, { opacity: 1, y: 0 }, 1);
+      tl.fromTo(
+        bottomCard1Ref.current,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0 },
+        0.5
+      );
 
+      // 100%
+      tl.fromTo(
+        topCard2Ref.current,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0 },
+        1
+      );
+
+      tl.fromTo(
+        bottomCard2Ref.current,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0 },
+        1
+      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -95,7 +104,7 @@ export default function Hero() {
       >
         <h1
           ref={textRef}
-          className="text-[80px] font-extrabold tracking-[0.15em] text-white opacity-0"
+          className="text-[70px] font-extrabold tracking-[0.15em] text-white"
         >
           WELCOME ITZFIZZ
         </h1>
@@ -104,7 +113,7 @@ export default function Hero() {
       {/* CAR */}
       <div
         ref={carRef}
-        className="absolute top-1/2 w-[40vw] min-w-[400px] max-w-[900px] -translate-y-1/2"
+        className="absolute top-1/2 -translate-y-1/2 w-[500px]"
       >
         <img
           src="/car.png"
@@ -118,7 +127,7 @@ export default function Hero() {
       <div className="absolute top-16 right-24 flex gap-8">
         <div
           ref={topCard1Ref}
-          className="bg-lime-400 w-[260px] p-6 rounded-2xl shadow-xl opacity-0 translate-y-10"
+          className="bg-lime-400 w-[260px] p-6 rounded-2xl shadow-xl"
         >
           <h2 className="text-4xl font-bold">58%</h2>
           <p className="mt-3">Increase in pick up point use</p>
@@ -126,7 +135,7 @@ export default function Hero() {
 
         <div
           ref={topCard2Ref}
-          className="bg-zinc-800 text-white w-[260px] p-6 rounded-2xl shadow-xl opacity-0 translate-y-10"
+          className="bg-zinc-800 text-white w-[260px] p-6 rounded-2xl shadow-xl"
         >
           <h2 className="text-4xl font-bold">27%</h2>
           <p className="mt-3">Increase in pick up point use</p>
@@ -137,7 +146,7 @@ export default function Hero() {
       <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-8">
         <div
           ref={bottomCard1Ref}
-          className="bg-sky-500 w-[280px] p-6 rounded-2xl shadow-xl opacity-0 translate-y-10"
+          className="bg-sky-500 w-[280px] p-6 rounded-2xl shadow-xl"
         >
           <h2 className="text-4xl font-bold">23%</h2>
           <p className="mt-3">Decreased in customer phone calls</p>
@@ -145,7 +154,7 @@ export default function Hero() {
 
         <div
           ref={bottomCard2Ref}
-          className="bg-orange-500 w-[280px] p-6 rounded-2xl shadow-xl opacity-0 translate-y-10"
+          className="bg-orange-500 w-[280px] p-6 rounded-2xl shadow-xl"
         >
           <h2 className="text-4xl font-bold">40%</h2>
           <p className="mt-3">Decreased in customer phone calls</p>
