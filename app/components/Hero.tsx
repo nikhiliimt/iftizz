@@ -25,22 +25,35 @@ export default function Hero() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=250%", // more scroll distance
+          end: "+=250%",
           scrub: 1,
           pin: true,
           anticipatePin: 1,
         },
       });
 
-      // CAR MOVEMENT THROUGH FULL SCROLL
+      // CALCULATE 25% VISIBILITY
       tl.fromTo(
         carRef.current,
-        { x: -250 },
-        { x: 800, ease: "none" },
+        {
+          x: () => {
+            const w = carRef.current!.offsetWidth;
+            const visible = w * 0.25;
+            return -w + visible; // left 25% visible
+          },
+        },
+        {
+          x: () => {
+            const w = carRef.current!.offsetWidth;
+            const visible = w * 0.25;
+            return window.innerWidth - visible; // right 25% visible
+          },
+          ease: "none",
+        },
         0
       );
 
-      // ROAD COLOR TRANSITION
+      // ROAD COLOR CHANGE
       tl.to(
         roadRef.current,
         {
@@ -50,12 +63,12 @@ export default function Hero() {
         0
       );
 
-      // TEXT FADE IN EARLY
+      // TEXT APPEARS EARLY
       tl.fromTo(
         textRef.current,
         { opacity: 0 },
         { opacity: 1 },
-        0.1
+        0.05
       );
 
       // FIRST PAIR AT 40%
@@ -111,10 +124,10 @@ export default function Hero() {
         </h1>
       </div>
 
-      {/* CAR */}
+      {/* CAR (Responsive width) */}
       <div
         ref={carRef}
-        className="absolute top-1/2 -translate-y-1/2 w-[500px]"
+        className="absolute top-1/2 -translate-y-1/2 w-[40vw] min-w-[400px] max-w-[800px]"
       >
         <img
           src="/car.png"
