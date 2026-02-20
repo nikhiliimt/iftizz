@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   basePath: "/iftizz",
-  assetPrefix: "/iftizz/",
+  trailingSlash: true,
 };
 
 export default nextConfig;
